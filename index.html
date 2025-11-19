@@ -1,136 +1,155 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ketlyn — Link em um só lugar</title>
-    <meta name="description" content="Todos os meus links em um só lugar." />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modelo LinkPage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+    body {
+      background: radial-gradient(circle at 20% 20%, #ff2f92 0%, #d423e0 25%, #6a00a8 55%, #150015 100%);
+      min-height:100vh;
+      padding:40px 15px;
+      display:flex;
+      justify-content:center;
+    }
+    .container {
+      width:100%; max-width:480px;
+      text-align:center;
+      color:#fff;
+    }
+    .hero-img {
+      width:100%;
+      height:380px;
+      border-radius:30px;
+      object-fit:cover;
+      box-shadow:0 20px 40px rgba(0,0,0,.35);
+    }
+    .name { font-size:32px; font-weight:800; margin-top:25px; }
+    .username { opacity:.8; margin-top:4px; }
+    .socials { margin-top:15px; display:flex; justify-content:center; gap:12px; }
+    .socials a {
+      width:48px; height:48px;
+      border-radius:50%;
+      background:#ffffff20;
+      display:flex; align-items:center; justify-content:center;
+      backdrop-filter:blur(6px);
+      transition:.2s;
+    }
+    .socials a:hover { background:#ffffff35; transform:translateY(-2px); }
 
-    <!-- Open Graph -->
-    <meta property="og:title" content="Ketlyn — Link em um só lugar" />
-    <meta property="og:description" content="Me manda um Oi 💬" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://dummyimage.com/1200x630/111827/ffffff.png&text=Ketlyn" />
+    .bio { margin-top:18px; font-size:15px; opacity:.9; line-height:1.55; }
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='85'>✨</text></svg>">
+    .gallery-wrapper { margin-top:28px; }
+    .gallery-title { font-weight:700; font-size:18px; opacity:.9; }
+    .gallery {
+      margin-top:14px; display:flex; gap:12px; overflow-x:auto; padding-bottom:10px;
+      scrollbar-width: none; /* Firefox */
+    }
+    .gallery::-webkit-scrollbar { display:none; }
+    .gallery img {
+      width:120px; height:150px;
+      border-radius:14px;
+      object-fit:cover;
+      flex-shrink:0;
+      box-shadow:0 10px 25px rgba(0,0,0,.35);
+    }
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "Segoe UI", "Roboto", "Helvetica Neue", "Arial"] },
-            colors: {
-              pinky: {
-                50: '#fff0f7', 100:'#ffd6ea', 200:'#ffadd5', 300:'#ff85c1', 400:'#ff5cab', 500:'#ff3f9f', 600:'#e6358f', 700:'#c42d7a', 800:'#9e2764', 900:'#7e214f'
-              },
-              mist: '#a3aab4'
-            },
-            boxShadow: {
-              soft: '0 10px 30px rgba(0,0,0,.15)'
-            },
-            borderRadius: { pill: '999px' }
-          }
-        }
-      }
-    </script>
+      /* === BOKEH LUZES === */
+    .bokeh-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      z-index:-1;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,180,255,0.35), transparent 55%),
+        radial-gradient(circle at 80% 18%, rgba(255,90,200,0.28), transparent 60%),
+        radial-gradient(circle at 25% 75%, rgba(150,0,255,0.25), transparent 60%),
+        radial-gradient(circle at 70% 65%, rgba(255,60,120,0.22), transparent 60%);
+      filter: blur(35px);
+    }
 
-    <!-- Inter font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    /* === GLOW ATRÁS DA FOTO === */
+    .hero-wrapper{
+      position:relative;
+      width:100%;
+    }
+    .hero-glow{
+      position:absolute;
+      top:50%; left:50%;
+      transform:translate(-50%, -50%);
+      width:85%; height:85%;
+      background: radial-gradient(circle, rgba(255,100,220,0.55), rgba(120,0,160,0.35), rgba(0,0,0,0));
+      filter: blur(55px);
+      z-index:-1;
+      border-radius:35px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
 
-    <style>
-      /* Fundo com efeito bokeh, similar ao site de referência */
-      body { background: linear-gradient(#c8cfd6, #a8b0b8); }
-      .bokeh:before,
-      .bokeh:after{
-        content:""; position: fixed; inset:0; pointer-events:none; z-index:-1;
-      }
-      .bokeh:before{
-        background: radial-gradient(120px 120px at 15% 20%, rgba(255,255,255,.65), rgba(255,255,255,0) 60%),
-                    radial-gradient(160px 160px at 85% 10%, rgba(255,255,255,.55), rgba(255,255,255,0) 60%),
-                    radial-gradient(140px 140px at 80% 40%, rgba(255,255,255,.45), rgba(255,255,255,0) 60%),
-                    radial-gradient(110px 110px at 20% 70%, rgba(255,255,255,.5), rgba(255,255,255,0) 60%),
-                    radial-gradient(150px 150px at 50% 90%, rgba(255,255,255,.4), rgba(255,255,255,0) 60%);
-        filter: blur(2px);
-      }
-      .hero-card img{ object-fit: cover; }
-    </style>
-  </head>
-  <body class="min-h-screen font-sans text-slate-900 bokeh">
-    <main class="max-w-2xl mx-auto px-4 pt-10 pb-20">
-      <!-- HERO -->
-      <section class="relative text-center">
-        <!-- capa -->
-        <div class="hero-card mx-auto w-full h-56 sm:h-64 rounded-2xl overflow-hidden shadow-soft ring-1 ring-white/40">
-          <img src="5.png" alt="Capa" class="w-full h-full"/>
-        </div>
-        <!-- avatar sobreposto -->
-        <div class="absolute left-1/2 -bottom-8 -translate-x-1/2">
-          <img src="11.png" class="h-28 w-28 rounded-full ring-4 ring-white shadow-soft object-cover" alt="Avatar"/>
-        </div>
-      </section>
+    <div class="bokeh-layer"></div>
 
-      <div class="h-10"></div>
+    <!-- FOTO PRINCIPAL COM GLOW -->
+    <div class="hero-wrapper">
+      <div class="hero-glow"></div>
+      <!-- FOTO PRINCIPAL (troque depois) -->
+    <img src="22.png" class="hero-img" alt="Hero" />
 
-      <!-- Nome & bio -->
-      <header class="text-center">
-        <h1 class="text-4xl font-extrabold tracking-tight">Ketlyn Freris</h1>
-        <p class="mt-2 text-xs uppercase tracking-[0.18em] text-slate-700">Depois do que eu fizer com você, serei a sua preferida!</p>
-        <div class="mt-3 flex items-center justify-center gap-4 text-xl">
-          <a href="#" aria-label="Instagram" class="hover:opacity-80">📷</a>
-          <a href="#" aria-label="TikTok" class="hover:opacity-80">🎵</a>
-        </div>
-      </header>
+    <h1 class="name">Ketlyn Freris</h1>
+    <p class="username">@ket.ket.lyn</p>
 
-      <p class="mt-6 text-center text-slate-700">Me manda um "Oi"</p>
+    <!-- ÍCONES (Instagram, X, TikTok) -->
+    <div class="socials">
+      <a href="#" aria-label="Instagram">
+        <svg width="26" fill="#fff" viewBox="0 0 24 24"><path d="M7 2C4.243 2 2 4.243 2 7v10c0 2.757 2.243 5 5 5h10c2.757 0 5-2.243 5-5V7c0-2.757-2.243-5-5-5H7zm10 2c1.654 0 3 1.346 3 3v10c0 1.654-1.346 3-3 3H7c-1.654 0-3-1.346-3-3V7c0-1.654 1.346-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm6-1a1 1 0 110 2 1 1 0 010-2z"/></svg>
+      </a>
 
-      <!-- Botões estilo pílula -->
-      <section class="mt-6 space-y-4">
-        <!-- BTN 1 -->
-        <a href="https://wa.me/5599999999999" target="_blank" rel="noopener" class="group block rounded-pill border-2 border-white/70 bg-pinky-500 text-white shadow-soft hover:translate-y-[-2px] transition overflow-hidden">
-          <div class="flex items-center gap-3 px-5 py-4">
-            <img src="22.png" class="h-14 w-14 rounded-full ring-2 ring-white/80 object-cover" alt="thumb"/>
-            <div class="flex-1 text-center">
-              <p class="text-base font-bold tracking-wide">VAMOS CONVERSAR</p>
-              <p class="text-xs opacity-90">Pode me mandar mensagem, eu não mordo se não pedir 😉</p>
-            </div>
+      <a href="#" aria-label="X">
+        <svg width="26" fill="#fff" viewBox="0 0 24 24"><path d="M18.244 2H21l-6.93 7.91L22 22h-7.078l-4.54-6.137L4.22 22H2l7.39-8.44L2 2h7.078l4.247 5.843L18.244 2z"/></svg>
+      </a>
+
+      <a href="#" aria-label="TikTok">
+        <svg width="26" fill="#fff" viewBox="0 0 24 24"><path d="M12.735 3.024c1.33 0 2.61-.003 3.89.012.09 1.69.61 3.25 1.62 4.63.85 1.18 1.96 2.05 3.27 2.6v3.56c-1.18-.04-2.32-.31-3.42-.8-.63-.28-1.22-.64-1.78-1.05-.02 2.16.01 4.32-.03 6.48-.05 1.02-.26 2.03-.67 2.98-.68 1.61-1.86 2.8-3.47 3.5-1.25.53-2.57.72-3.92.55-2.05-.25-3.67-1.17-4.85-2.8-.86-1.2-1.39-2.55-1.57-4-.04-.36-.06-.73-.06-1.1.02-1.63.52-3.12 1.49-4.44 1.28-1.78 3-2.86 5.14-3.22.64-.11 1.28-.14 1.93-.1v3.72c-.36-.09-.7-.07-1.04-.02-1.61.25-2.72 1.71-2.62 3.3.1 1.52 1.32 2.83 2.83 2.99 1.6.17 3.03-.87 3.33-2.45.04-.2.06-.41.06-.62.01-4.63.01-9.27.01-13.9z"/></svg>
+      </a>
+    </div>
+
+    <p class="bio">✨ Eu mostro literalmente tudinho aqui, então por favor, guarde pra você! 🫣😘</p>
+
+    <!-- GALERIA -->
+    <div class="gallery-wrapper">
+      <div class="gallery">
+        <img src="6.png" alt="g1" />
+        <img src="1.png" alt="g2" />
+        <img src="5.png" alt="g3" />
+        <img src="16.png" alt="g4" />
+      </div>
+          </div>
+
+      <!-- NOVO BOTÃO GRANDE TELEGRAM -->
+     <div style="margin-top:35px; text-align:center;">
+  <p style="font-size:17px; font-weight:600; margin-bottom:10px;">Vem dar uma olhadinha🥰🔥⤵</p>
+
+         <a href="https://t.me/kettfreris_bot?start=exclusivo" class="big-button" style="display:block; text-decoration:none;" target="_blank">
+    <div style="position:relative; width:100%; max-width:480px; margin:0 auto;"
+
+            <-- ÍCONE DO TELEGRAM -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg"
+           style="position:absolute; top:15px; left:15px; width:45px; height:45px; background:#fff; padding:6px; border-radius:50%; box-shadow:0 4px 12px rgba(0,0,0,.25); object-fit:contain;" />
+
+            <!-- IMAGEM GRANDE DO BOTÃO (TROQUE DEPOIS) -->
+              <img src="43.png" class="main-img"
+           style="width:100%; height:300px; object-fit:cover; border-radius:22px; box-shadow:0 15px 35px rgba(0,0,0,.45);" />
+
+      <p style="margin-top:10px; font-size:20px; font-weight:700; color:#fff; text-align:center; text-shadow:0 2px 6px rgba(0,0,0,.5);">MEU EXCLUSIVO!💙</p>
           </div>
         </a>
+      </div>
 
-        <!-- BTN 2 -->
-        <a href="#" class="group block rounded-pill border-2 border-white/80 bg-pinky-400 text-white shadow-soft hover:translate-y-[-2px] transition overflow-hidden">
-          <div class="flex items-center gap-3 px-5 py-4">
-            <img src="16.png" class="h-14 w-14 rounded-full ring-2 ring-white/80 object-cover" alt="thumb"/>
-            <div class="flex-1 text-center">
-              <p class="text-base font-bold tracking-wide">👑 GRUPO VIP</p>
-              <p class="text-xs opacity-90">O grupo mais desejado por homens de verdade!</p>
-            </div>
-          </div>
-        </a>
-
-        <!-- BTN 3 -->
-        <a href="#" class="group block rounded-pill border-2 border-white/80 bg-pinky-500 text-white shadow-soft hover:translate-y-[-2px] transition overflow-hidden">
-          <div class="flex items-center gap-3 px-5 py-4">
-            <img src="29 (1).png" class="h-14 w-14 rounded-full ring-2 ring-white/80 object-cover" alt="thumb"/>
-            <div class="flex-1 text-center">
-              <p class="text-base font-bold tracking-wide">📂 Conteúdos</p>
-              <p class="text-xs opacity-90">Todos os meus conteúdos picantes</p>
-            </div>
-          </div>
-        </a>
-      </section>
-
-      <!-- Rodapé pequeno -->
-      <footer class="mt-10 text-center text-xs text-slate-700/80">
-        <p>© <span id="year"></span> Ketlyn — Todos os direitos reservados.</p>
-      </footer>
-    </main>
-
-    <script>
-      document.getElementById('year').textContent = new Date().getFullYear()
-    </script>
+    </div>
   </body>
 </html>
